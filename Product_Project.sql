@@ -1,0 +1,287 @@
+create database product_subquery;
+use product_subquery;
+
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(50),
+    Category VARCHAR(30),
+    Price DECIMAL(10, 2),
+    Stock INT
+);
+
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    City VARCHAR(30),
+    Age INT
+);
+
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    CustomerID INT,
+    ProductID INT,
+    Quantity INT,
+    OrderDate DATE,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+INSERT INTO Products (ProductID, ProductName, Category, Price, Stock) VALUES
+(1, 'Laptop', 'Electronics', 800.00, 50),
+(2, 'Smartphone', 'Electronics', 500.00, 100),
+(3, 'Headphones', 'Accessories', 75.00, 200),
+(4, 'Tablet', 'Electronics', 300.00, 60),
+(5, 'Camera', 'Electronics', 400.00, 40),
+(6, 'Charger', 'Accessories', 20.00, 500),
+(7, 'Monitor', 'Electronics', 150.00, 70),
+(8, 'Keyboard', 'Accessories', 45.00, 300),
+(9, 'Mouse', 'Accessories', 25.00, 400),
+(10, 'Speaker', 'Accessories', 100.00, 80),
+(11, 'Jeans', 'Fashion', 1000.00, 100),
+(12, 'Kurtas', 'Fashion', 1200.00, 70),
+(13, 'Sandals', 'Footwear', 300.00, 400),
+(14, 'Costmetics', 'Face', 3000.00, 1000),
+(15, 'Hair dryer', 'Electronics', 1500.00, 80),
+(16, 'Jackets', 'Fashion', 2000.00, 300),
+(17, 'Tables', 'Furniture', 400.00, 120),
+(18, 'Chairs', 'Furniture', 700.00, 50),
+(19, 'Sofas', 'Furniture', 2500.00, 20),
+(20, 'Cooker', 'Kitchen', 950.00, 80),
+(21, 'Dinning table', 'Furniture', 5000.00, 30),
+(22, 'Plates', 'Kitchen', 230.00, 150);
+
+
+
+
+INSERT INTO Customers (CustomerID, Name, City, Age) VALUES
+(1, 'Alice Johnson', 'New York', 28),
+(2, 'Bob Smith', 'Los Angeles', 34),
+(3, 'Carol White', 'Chicago', 23),
+(4, 'David Lee', 'Houston', 40),
+(5, 'Eve Williams', 'Phoenix', 30),
+(6, 'Frank Brown', 'Seattle', 27),
+(7, 'Grace Taylor', 'Austin', 35),
+(8, 'Henry Thomas', 'San Diego', 25),
+(9, 'Isla Walker', 'Boston', 32),
+(10, 'Jack King', 'San Francisco', 29);
+
+INSERT INTO Orders (OrderID, CustomerID, ProductID, Quantity, OrderDate) VALUES
+(1, 2, 1, 2, '2024-01-15'),
+(2, 1, 2, 1, '2024-01-18'),
+(3, 1, 4, 3, '2024-01-18'),
+(4, 1, 3, 1, '2024-01-22'),
+(5, 5, 6, 1, '2024-01-22'),
+(6, 4, 9, 5, '2024-01-22'),
+(7, 5, 7, 2, '2024-02-01'),
+(8, 6, 18, 3, '2024-02-05'),
+(9, 6, 17, 4, '2024-02-05'),
+(11, 5, 10, 1, '2024-02-15'),
+(12, 8, 21, 1, '2024-02-11'),
+(13 ,9 ,15 ,2 ,'2024-02-21'),
+(14 ,10 ,20 ,4 ,'2024-02-25'),
+(15 ,9 ,17 ,7 ,'2024-02-27'),
+(16 ,10 ,13 ,2 ,'2024-05-03'),
+(17 ,5 ,12 ,1 ,'2024-06-23'),
+(18 ,8 ,16 ,1 ,'2024-06-26'),
+(19 ,7 ,18 ,8 ,'2024-07-01'),
+(20 , 10 ,11 ,10,'2024-07-13'),
+(21 , 8 , 5, 2 ,'2024-08-21'),
+(22 , 9 , 8 , 1 , '2024-11-12');
+
+CREATE TABLE ProductReviews (
+    ReviewID INT PRIMARY KEY AUTO_INCREMENT,
+    ProductID INT,
+    CustomerID INT,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5),
+    ReviewText TEXT,
+    ReviewDate DATE,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+INSERT INTO ProductReviews (ProductID, CustomerID, Rating, ReviewText, ReviewDate) VALUES
+(1, 2, 5, 'Excellent performance and build quality.', '2024-01-20'),
+(2, 1, 4, 'Good phone but battery life could be better.', '2024-01-19'),
+(6, 5, 3, 'Average charger. Heats up sometimes.', '2024-01-23'),
+(13, 10, 4, 'Comfortable and stylish sandals.', '2024-05-05'),
+(17, 9, 5, 'Strong and sturdy. Value for money.', '2024-02-28'),
+(21, 8, 2, 'Very expensive for the quality.', '2024-03-01');
+
+
+CREATE TABLE ProductSupplier (
+    ProductID INT,
+    SupplierID INT,
+    SupplyDate DATE,
+    PRIMARY KEY (ProductID, SupplierID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID)
+);
+
+INSERT INTO ProductSupplier (ProductID, SupplierID, SupplyDate) VALUES
+(1, 1, '2023-12-01'),
+(2, 3, '2023-12-05'),
+(11, 2, '2024-01-10'),
+(17, 4, '2023-11-20'),
+(20, 5, '2024-02-01');
+
+
+CREATE TABLE Suppliers (
+    SupplierID INT PRIMARY KEY AUTO_INCREMENT,
+    SupplierName VARCHAR(50),
+    ContactEmail VARCHAR(50),
+    City VARCHAR(30)
+);
+
+INSERT INTO Suppliers (SupplierName, ContactEmail, City) VALUES
+('Tech Distributors', 'contact@techdist.com', 'New York'),
+('Fashion Hub', 'sales@fashionhub.com', 'Los Angeles'),
+('Gadget World', 'info@gadgetworld.com', 'Chicago'),
+('Home Essentials', 'support@homeessentials.com', 'Houston'),
+('KitchenMart', 'help@kitchenmart.com', 'Phoenix');
+
+select* from products;
+
+select* from customers;
+
+select* from orders;
+
+select* from ProductReviews;
+
+select*from suppliers;
+
+select * from ProductSupplier;
+
+-- Queries 
+
+-- 1. Top 5 Best-Selling Products 
+select p.productname,sum(o.quantity)  as total_sold 
+from products as p 
+join orders as o on
+p.productid =o.productid
+group by p.productname
+order by total_sold  desc limit 5;
+
+
+-- 2. Total Revenue Generated by Each Product Category 
+select p.productname,p.category,sum(p.price*o.quantity) as Total_revenue
+from products as p 
+join orders as o on
+p.productid =o.productid
+group by p.productname,p.category
+ORDER BY TOTAL_REVENUE DESC;
+
+
+-- 3. Average Rating of Each Product 
+select avg(PR.rating) as Rating,P.PRODUCTNAME FROM products AS P
+JOIN PRODUCTREVIEWS AS PR ON
+p.productid =PR.productid
+GROUP BY P.PRODUCTNAME
+ORDER BY RATING DESC;
+
+
+-- 4. Check Product Stock Status (Low Stock Alert less than 50) 
+SELECT P.PRODUCTNAME,P.STOCK, 
+CASE WHEN STOCK<50 
+THEN "LOW STOCK ALERT"
+ELSE STOCK
+END AS STOCK_STATUS
+FROM PRODUCTS AS P 
+ORDER BY STOCK_STATUS ASC;
+
+-- 5. Most Active Customers (Highest Number of Orders) 
+select c.name,sum(o.quantity) as high_order,count(o.orderid) as total_order
+from customers as c
+join orders as o
+on c.customerid=o.customerid
+group by c.name
+order by high_order desc;
+
+
+-- 6. List of Products with No Reviews
+select p.productname,p.productid 
+from products as p 
+where p.productid not in (select distinct productid from productreviews) ;
+
+-- 7. Top Reviewed Products (Most Number of Reviews)
+select p.productname,sum(pr.rating) as top_review 
+from products as p 
+join productreviews as pr 
+on p.productid=pr.productid
+group by p.productname,pr.rating
+order by top_review desc;
+
+
+-- 8. Name of the customers Who Spent More Than ₹2000 
+select c.name,sum(p.price* o.quantity) as total from customers as c
+join orders as o
+on c.customerid=o.customerid
+join products as p
+on o.productid=p.productid
+group by c.customerid,c.name
+having total >2000;
+
+-- 9. Average Rating of Each Product
+select p.productname,avg(pr.rating) as top_review 
+from products as p 
+join productreviews as pr 
+on p.productid=pr.productid
+group by p.productname
+order by top_review desc;
+
+-- 10. Find Customers Who Bought More Than 3 Different Products
+select c.name,count(p.productname) as orders  from customers as c
+join orders as o
+on c.customerid=o.customerid
+join products as p
+on o.productid=p.productid
+group by c.name
+having orders >3;
+
+-- 11. List of Products Never Ordered 
+select p.productname,p.productid 
+from products as p 
+where p.productid not in (select distinct productid from orders) ;
+
+
+-- 12. Average Order Quantity Per Product 
+select p.productname,avg(o.quantity) as avg_quantity 
+from products as p
+join orders as o 
+on p.productid=o.productid
+group by p.productname
+order by avg_quantity desc;
+
+
+-- 13. Customer Product Feedback Summary
+select p.productname,pr.reviewtext,sum(pr.rating) as Rating
+from products as p
+join productreviews as pr
+on p.productid=pr.productid
+group by productname,pr.reviewtext 
+order by rating desc;
+
+ 
+-- 14. Average Age of Customers Per City
+select avg(age)as avg_age,city from customers group by city;
+
+-- 15. Most Expensive Product in Each Category
+select productname,category,price  as expensive
+from products 
+where price=(select max(price) from products as p1 
+where p1.category =products.category) 
+order by  price desc;
+
+-- 16. Monthly Sales Report
+SELECT 
+    DATE_FORMAT(o.OrderDate, '%Y-%m') AS Month,
+    COUNT(DISTINCT o.OrderID) AS TotalOrders,
+    SUM(o.Quantity) AS TotalQuantitySold,
+    SUM(p.Price * o.Quantity) AS TotalRevenue
+FROM 
+    Orders o
+JOIN 
+    Products p ON o.ProductID = p.ProductID
+GROUP BY 
+    Month
+ORDER BY 
+    Month;
